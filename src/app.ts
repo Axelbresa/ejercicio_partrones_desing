@@ -1,7 +1,8 @@
-import { Configuracion} from "./patters/singleton/gestionar_config";
+import { Configuracion} from "./patters/singleton/config_db/gestionar_config";
 import { ConexionDB} from "./patters/singleton/conexion_db";
 import { config_db } from "./patters/singleton/config_db";
-import { config_gestion} from "./patters/singleton/config_gestion";
+import { config_gestion} from "./patters/singleton/config_db/config_gestion";
+import {DispositivoEntradaFactory} from "./patters/factory/addDispositivos/addDispositivos"
 
 //Patron Singletón
 
@@ -28,11 +29,33 @@ conect.conectarDb()
 conect.desconectarDb()
 
 // //Patron Factory Method
+const dispositivo=new DispositivoEntradaFactory()
+
+const teclado=dispositivo.crearDispositivo("teclado", {
+  conexion:"cable", 
+  tipo_teclado:"Mecánico", 
+  cant_teclas:24
+})
+
+const raton=dispositivo.crearDispositivo("raton", {
+  dpi:500,
+  tipo_raton:"optico",
+  cant_botones:5
+})
+
+const scanner=dispositivo.crearDispositivo("scanner", {
+  tipo_scanner:"Scanner 3D",
+  resolucion:9100
+})
+
+console.log(teclado)
+console.log(raton)
+console.log(scanner)
+
 
 // //Patron Observer
 
-
 // Patrón Adaptador:
-// Configurar la configuración inicial
+
 
 
