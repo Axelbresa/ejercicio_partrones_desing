@@ -1,4 +1,4 @@
-import {config, Sequelize} from "./config_db"
+import {config_db, Sequelize} from "./config_db"
 
 export class ConexionDB{
     private username: string;
@@ -7,12 +7,12 @@ export class ConexionDB{
     private password: string;
     private host: string;
 
-    constructor(config: Sequelize) {  // Recibe la configuración como parámetro
-        this.puerto = config.puerto;
-        this.username = config.username;
-        this.database = config.database;
-        this.password = config.password;
-        this.host = config.host;
+    constructor(config_db: Sequelize) {  // Recibe la configuración como parámetro
+        this.puerto = config_db.puerto;
+        this.username = config_db.username;
+        this.database = config_db.database;
+        this.password = config_db.password;
+        this.host = config_db.host;
     }
     
     public listenPuerto(){

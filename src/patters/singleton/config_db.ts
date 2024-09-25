@@ -6,7 +6,7 @@ export interface Sequelize{
     host: string
 }
 
-export const config:Sequelize ={
+export const config_db:Sequelize ={
     puerto:"3000",
     database:"inventarioDb",
     username:"Axel",
