@@ -5,6 +5,7 @@ import { config_gestion} from "./patters/singleton/config_db/config_gestion";
 import {DispositivoEntradaFactory} from "./patters/factory/addDispositivos/addDispositivos"
 import {PerifericoSalidaFactory} from "./patters/factory/fabricar_perifericos/fabricar_salida"
 import {Equipo, DepartamentoMantenimiento} from "./patters/observer/notifi_mante/notificacion"
+import {InterfazUsuario, Inventario} from "./patters/observer/updateInventario/inventario_update"
 
 //Patron Singletón
 
@@ -97,6 +98,13 @@ mantenimiento_equipo1.cambiar_estado("mantenimiento preventivo", 100)
 mantenimiento_equipo1.cambiar_estado("mantenimiento preventivo", 131)
 
 //update inventario
-console.log("Update de invenatario---------------------------------")
+console.log("Update de inventario---------------------------------")
+const observador_usuario= new InterfazUsuario()
+const inventario=new Inventario()
+inventario.addObservador(observador_usuario);
 
+inventario.addEquipo({id:1, nombre: "lenovox", tipo: "portátil" });
+inventario.addEquipo({ id:2, nombre: "lenovo", tipo: "escritorio" });
+inventario.updateEquipo(1, "LenovoActualizado", "gaming");
+inventario.deleteEquipo(2);
 // Patrón Adaptador:
