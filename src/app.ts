@@ -3,6 +3,8 @@ import { ConexionDB} from "./patters/singleton/conexion_db";
 import { config_db } from "./patters/singleton/config_db";
 import { config_gestion} from "./patters/singleton/config_db/config_gestion";
 import {DispositivoEntradaFactory} from "./patters/factory/addDispositivos/addDispositivos"
+import {PerifericoSalidaFactory} from "./patters/factory/fabricar_perifericos/fabricar_salida"
+import {Equipo, DepartamentoMantenimiento} from "./patters/observer/notifi_mante/notificacion"
 
 //Patron Singletón
 
@@ -29,21 +31,24 @@ conect.conectarDb()
 conect.desconectarDb()
 
 // //Patron Factory Method
-const dispositivo=new DispositivoEntradaFactory()
+// entrada de factory
+console.log("entrada de factory---------------------------------")
 
-const teclado=dispositivo.crearDispositivo("teclado", {
+const dispositivo_entrada=new DispositivoEntradaFactory()
+
+const teclado=dispositivo_entrada.crearDispositivo("teclado", {
   conexion:"cable", 
   tipo_teclado:"Mecánico", 
   cant_teclas:24
 })
 
-const raton=dispositivo.crearDispositivo("raton", {
+const raton=dispositivo_entrada.crearDispositivo("raton", {
   dpi:500,
   tipo_raton:"optico",
   cant_botones:5
 })
 
-const scanner=dispositivo.crearDispositivo("scanner", {
+const scanner=dispositivo_entrada.crearDispositivo("scanner", {
   tipo_scanner:"Scanner 3D",
   resolucion:9100
 })
@@ -52,10 +57,46 @@ console.log(teclado)
 console.log(raton)
 console.log(scanner)
 
+// Salida de factory
+console.log("Salida de factory---------------------------------")
+const dispositivo_salida=new PerifericoSalidaFactory()
+
+const Monitor= dispositivo_salida.crearPeriferico("Monitor", {
+    resolucion: "1920x1080",
+    tamaño_pantalla:"24 pulgadas"
+})
+
+const Impresora = dispositivo_salida.crearPeriferico("Impresora", {
+    tipo_impresora:"Inyección de tinta",
+    velocidad_impresion: "20 páginas por minuto"
+})
+
+const Proyector= dispositivo_salida.crearPeriferico("Proyector", {
+    resolucion:"1080p, 4K",
+    brillo:"medido en lúmenes",
+})
+
+console.log(Monitor)
+console.log(Impresora)
+console.log(Proyector)
 
 // //Patron Observer
+//notificacion de mantenimiento
+console.log("Notificacion_Mantenimiento---------------------------------")
+
+const departamento_mantemiento=new DepartamentoMantenimiento()
+
+const mantenimiento_equipo1=new Equipo("lenovo", "electronico", "Impecable", 75)
+
+mantenimiento_equipo1.add_observer(departamento_mantemiento)
+
+mantenimiento_equipo1.cambiar_estado("En buenas condiciones", 51)
+mantenimiento_equipo1.cambiar_estado("mantenimiento preventivo", 100)
+mantenimiento_equipo1.cambiar_estado("En buenas condiciones", 101)
+mantenimiento_equipo1.cambiar_estado("mantenimiento preventivo", 100)
+mantenimiento_equipo1.cambiar_estado("mantenimiento preventivo", 131)
+
+//update inventario
+console.log("Update de invenatario---------------------------------")
 
 // Patrón Adaptador:
-
-
-
