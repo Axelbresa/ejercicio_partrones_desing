@@ -18,7 +18,6 @@ interface Product {
     id: number;
     title: string;
     price: number;
-    stock?: number; // Puedes agregar stock si es necesario
     rating: {
         rate: number;
         count: number;
@@ -31,44 +30,62 @@ export class ProveedorExternoAPI {
     constructor() {}
 
     // Cambiado a Promise<void>
-    fetchProductos(): Promise<void> {
-        return fetch('https://fakestoreapi.com/products/category/electronics')
-            .then(response => response.json())
-            .then((data: Product[]) => {
-                // Iterar sobre los productos y agregar al array
-                this.productos.push(...data); // Agregar productos al array
-                console.log('Productos agregados:', this.productos);
-            })
-            .catch(error => console.error('Error fetching products:', error));
+    async fetchProductos(): Promise<void> {
+        try {
+            const response = await fetch('https://fakestoreapi.com/products/category/electronics');
+            const data: Product[] = await response.json();
+            // Filtrar solo las propiedades necesarias (id, title, price, rating)
+            const filteredData = data.map((producto: any) => ({
+                id: producto.id,
+                title: producto.title,
+                price: producto.price,
+                rating: producto.rating
+            }));
+    
+            // Agregar los productos filtrados al array
+            this.productos.push(...filteredData);
+        } catch (error) {
+            console.error('Error fetching products:', error);
+        }
     }
 
-    updateStock(dato_actualizar: Product) {
-        console.log("Lista de productos en updateStock:", this.productos);
+    async updateStock(dato_actualizar: Product): Promise<void> {
+        // Si el array de productos está vacío, hacer fetch de los productos
+        if (this.productos.length === 0) {
+            console.log('Los productos no están cargados. Cargando productos...');
+            await this.fetchProductos(); // Esperar a que los productos se carguen
+        }
 
         const producto = this.productos.find(product => product.id === dato_actualizar.id);
         
         if (producto) {
-            // Actualizar el stock o cualquier otro campo necesario
-            producto.price = dato_actualizar.price; // Cambia esto si necesitas actualizar el stock
-            console.log(`Stock actualizado para el producto ${producto.title}: ${producto.price}`);
+            producto.title = dato_actualizar.title;
+            producto.price = dato_actualizar.price;
+            producto.rating = dato_actualizar.rating;
+
+            console.log(`Stock actualizado para el producto ${dato_actualizar.title}: ${dato_actualizar.price} : ${dato_actualizar.rating.count}`);
         } else {
             console.log(`Producto con ID ${dato_actualizar.id} no encontrado.`);
         }
     }
 }
         
-    export class AdaptadorProveedor implements IProveedor {
+export class AdaptadorProveedor implements IProveedor {
     private proveedor_externo_api: ProveedorExternoAPI;
     
     constructor(proveedor_externo_api: ProveedorExternoAPI) {
         this.proveedor_externo_api = proveedor_externo_api;
     }
 
-    obtenerProductos() {
-        this.proveedor_externo_api.fetchProductos()
+    async obtenerProductos() {
+        // Esperar hasta que fetchProductos termine antes de continuar
+        await this.proveedor_externo_api.fetchProductos();
+        // console.log("Productos cargados: ", this.proveedor_externo_api.productos);
     }
 
-    actualizarInventario(update_producto: Product) {
+    async actualizarInventario(update_producto: Product) {
         this.proveedor_externo_api.updateStock(update_producto);
     }
+
 }
+

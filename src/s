@@ -9,7 +9,7 @@ import {InterfazUsuario, Inventario} from "./patters/observer/updateInventario/i
 import { FacturacionVieja, AdaptadorFacturacion } from "./patters/adaptador/Integrar_sys_Facturación/sys_facturacion";
 import {AdaptadorProveedor, ProveedorExternoAPI} from "./patters/adaptador/api_externas/api_externas"
 
-// //Patron Singletón
+//Patron Singletón
 
 //gestion de configuracion
 console.log("Gestion de configuracion global---------------------------")
@@ -124,13 +124,13 @@ inventario.deleteEquipo(2);
 
 //Api externas
 const proveedorAPI = new ProveedorExternoAPI();
-const api_externa = new AdaptadorProveedor(proveedorAPI);
 
-(async () => {
-await api_externa.obtenerProductos()
-await api_externa.actualizarInventario({ id: 10, title: 'campeon',price: 115, 
-  rating: { rate: 2.9, count: 470 }})
-  
-    // Verificar la lista de productos actualizada
-    console.log("Lista de productos después de la actualización:", proveedorAPI.productos);
-})();
+proveedorAPI.fetchProductos().then(() => {
+    // Aquí puedes llamar a updateStock después de que los productos se hayan cargado
+    proveedorAPI.updateStock({ 
+        id: 10, // Cambia al ID correcto que deseas actualizar
+        title: 'SanDisk SSD PLUS 1TB Internal SSD - SATA III 6 Gb/s',
+        price: 115, // Precio actualizado
+        rating: { rate: 2.9, count: 470 }
+    });
+});
