@@ -6,8 +6,8 @@ import {DispositivoEntradaFactory} from "./patters/factory/addDispositivos/addDi
 import {PerifericoSalidaFactory} from "./patters/factory/fabricar_perifericos/fabricar_salida"
 import {Equipo, DepartamentoMantenimiento} from "./patters/observer/notifi_mante/notificacion"
 import {InterfazUsuario, Inventario} from "./patters/observer/updateInventario/inventario_update"
-import { Adapter, OldSystem } from "./patters/adaptador/Integrar_sys_Facturación/integrar";
 import { FacturacionVieja, AdaptadorFacturacion } from "./patters/adaptador/Integrar_sys_Facturación/sys_facturacion";
+import {AdaptadorProveedor, ProveedorExternoAPI} from "./patters/adaptador/api_externas/api_externas"
 
 //Patron Singletón
 
@@ -111,12 +111,7 @@ inventario.updateEquipo(1, "LenovoActualizado", "gaming");
 inventario.deleteEquipo(2);
 
 // Patrón Adaptador:
-
-  // const oldSystem = new OldSystem(); // Instancia del sistema antiguo
-  // const adapter = new Adapter(oldSystem); // Usamos el adaptador para que el sistema antiguo funcione como uno nuevo
-  
-  // console.log(adapter.request()); // Salida: 'Respuesta del sistema antiguo'
-
+//sistema de facturacion
   console.log("Sistema de facturacion---------------------------------")
   const factura_vieja=new FacturacionVieja()
   const factura_nueva=new AdaptadorFacturacion(factura_vieja)
@@ -124,6 +119,18 @@ inventario.deleteEquipo(2);
   factura_nueva.generarFactura({cliente:"Axel", cant_producto:132, total:52513})
   factura_nueva.generarFactura({cliente:"Ramon", cant_producto:1332, total:21213})
   factura_nueva.consultarFactura()
+
   console.log("Api externas---------------------------------")
 
-  
+//Api externas
+const proveedorAPI = new ProveedorExternoAPI();
+
+proveedorAPI.fetchProductos().then(() => {
+    // Aquí puedes llamar a updateStock después de que los productos se hayan cargado
+    proveedorAPI.updateStock({ 
+        id: 10, // Cambia al ID correcto que deseas actualizar
+        title: 'SanDisk SSD PLUS 1TB Internal SSD - SATA III 6 Gb/s',
+        price: 115, // Precio actualizado
+        rating: { rate: 2.9, count: 470 }
+    });
+});
