@@ -6,6 +6,8 @@ import {DispositivoEntradaFactory} from "./patters/factory/addDispositivos/addDi
 import {PerifericoSalidaFactory} from "./patters/factory/fabricar_perifericos/fabricar_salida"
 import {Equipo, DepartamentoMantenimiento} from "./patters/observer/notifi_mante/notificacion"
 import {InterfazUsuario, Inventario} from "./patters/observer/updateInventario/inventario_update"
+import { Adapter, OldSystem } from "./patters/adaptador/Integrar_sys_Facturación/integrar";
+import { FacturacionVieja, AdaptadorFacturacion } from "./patters/adaptador/Integrar_sys_Facturación/sys_facturacion";
 
 //Patron Singletón
 
@@ -107,4 +109,21 @@ inventario.addEquipo({id:1, nombre: "lenovox", tipo: "portátil" });
 inventario.addEquipo({ id:2, nombre: "lenovo", tipo: "escritorio" });
 inventario.updateEquipo(1, "LenovoActualizado", "gaming");
 inventario.deleteEquipo(2);
+
 // Patrón Adaptador:
+
+  // const oldSystem = new OldSystem(); // Instancia del sistema antiguo
+  // const adapter = new Adapter(oldSystem); // Usamos el adaptador para que el sistema antiguo funcione como uno nuevo
+  
+  // console.log(adapter.request()); // Salida: 'Respuesta del sistema antiguo'
+
+  console.log("Sistema de facturacion---------------------------------")
+  const factura_vieja=new FacturacionVieja()
+  const factura_nueva=new AdaptadorFacturacion(factura_vieja)
+
+  factura_nueva.generarFactura({cliente:"Axel", cant_producto:132, total:52513})
+  factura_nueva.generarFactura({cliente:"Ramon", cant_producto:1332, total:21213})
+  factura_nueva.consultarFactura()
+  console.log("Api externas---------------------------------")
+
+  
