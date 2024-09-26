@@ -65,7 +65,7 @@ export class ProveedorExternoAPI {
     }
 
     obtenerProductos() {
-        this.proveedor_externo_api.fetchProductos();
+        this.proveedor_externo_api.fetchProductos()
     }
 
     actualizarInventario(update_producto: Product) {
