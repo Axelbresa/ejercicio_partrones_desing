@@ -1,13 +1,14 @@
 import {config_db, Sequelize} from "./config_db"
 
 export class ConexionDB{
+    private static instancia:ConexionDB
     private username: string;
     private puerto: string;
     private database: string;
     private password: string;
     private host: string;
 
-    constructor(config_db: Sequelize) {  // Recibe la configuración como parámetro
+    private constructor() {  // Recibe la configuración como parámetro
         this.puerto = config_db.puerto;
         this.username = config_db.username;
         this.database = config_db.database;
@@ -15,6 +16,13 @@ export class ConexionDB{
         this.host = config_db.host;
     }
     
+    public static getInstaciaConexion(){
+        if (!ConexionDB.instancia){
+            ConexionDB.instancia=new ConexionDB()
+        }
+        return ConexionDB.instancia
+    }
+
     public listenPuerto(){
         console.log("El servidor esta escuchando en: ")
         console.log("http://localhost:"+this.puerto )
